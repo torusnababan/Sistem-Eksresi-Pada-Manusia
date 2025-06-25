@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Kuis IPA SMP Sistem Eksresi Pada Manusia</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 30px;
+    }
+    .question {
+      margin-bottom: 20px;
+    }
+    .hidden {
+      display: none;
+    }
+    input[type="text"] {
+      width: 300px;
+      margin-bottom: 10px;
+      display: block;
+    }
+    #timer {
+      font-weight: bold;
+      color: red;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Kuis IPA SMP</h2>
+  <h2>By: Torus Manuntun Nababan, M.Pd</h2>
+  <h2>Materi: Sistem Eksresi Pada Manusia</h2>
+  <!-- Form Identitas -->
+  <div id="identityForm">
+    <h3>Silakan isi identitas terlebih dahulu:</h3>
+    <label>Nama:
+      <input type="text" id="nama" required>
+    </label>
+    <label>Kelas:
+      <input type="text" id="kelas" required>
+    </label>
+    <label>Tahun Ajaran:
+      <input type="text" id="tahun" required>
+    </label>
+    <label>Nama Sekolah:
+      <input type="text" id="sekolah" required>
+    </label>
+    <button onclick="startQuiz()">Mulai Kuis</button>
+  </div>
+
+  <!-- Timer -->
+  <div id="timer" class="hidden"></div>
+
+  <!-- Form Soal -->
+  <form id="quizForm" class="hidden">
+    <div id="questionsContainer"></div>
+    <button type="button" onclick="submitQuiz()">Selesai dan Lihat Skor</button>
+  </form>
+
+  <div id="result" class="hidden"></div>
+
+  <script>
+    const questions = [
+      { question: "1. Sistem ekskresi berfungsi untuk...", options: ["Mengedarkan darah", "Membentuk sel darah merah", "Mengeluarkan zat sisa metabolisme", "Menghancurkan makanan"], answer: "Mengeluarkan zat sisa metabolisme" },
+    { question: "2. Organ utama dalam sistem ekskresi manusia adalah...", options: ["Paru-paru, ginjal, hati, kulit", "Jantung, paru-paru, lambung, usus", "Usus, lambung, hati, pankreas", "Hidung, telinga, mata, kulit"], answer: "Paru-paru, ginjal, hati, kulit" },
+    { question: "3. Zat sisa metabolisme yang dikeluarkan melalui paru-paru adalah...", options: ["Urea", "Air seni", "Karbon dioksida dan uap air", "Empedu"], answer: "Karbon dioksida dan uap air" },
+    { question: "4. Ginjal berfungsi menyaring darah untuk membentuk...", options: ["Empedu", "Keringat", "Urine", "Lendir"], answer: "Urine" },
+    { question: "5. Urine normal tidak mengandung...", options: ["Air", "Urea", "Garam", "Glukosa"], answer: "Glukosa" },
+    { question: "6. Bagian ginjal yang berfungsi sebagai unit penyaring disebut...", options: ["Ureter", "Nefron", "Uretra", "Pelvis renalis"], answer: "Nefron" },
+    { question: "7. Saluran yang menghubungkan ginjal ke kandung kemih adalah...", options: ["Uretra", "Ureter", "Nefron", "Tubulus"], answer: "Ureter" },
+    { question: "8. Kulit mengeluarkan zat sisa dalam bentuk...", options: ["Empedu", "Urine", "Keringat", "Karbon dioksida"], answer: "Keringat" },
+    { question: "9. Fungsi hati dalam sistem ekskresi adalah menghasilkan...", options: ["Glukosa", "Empedu", "Keringat", "Hormon insulin"], answer: "Empedu" },
+    { question: "10. Warna urine yang sehat biasanya berwarna...", options: ["Merah", "Bening seperti air", "Kuning muda", "Hijau"], answer: "Kuning muda" },
+    { question: "11. Bagian otak yang mengatur keseimbangan cairan tubuh adalah...", options: ["Medula oblongata", "Serebrum", "Hipotalamus", "Talamus"], answer: "Hipotalamus" },
+    { question: "12. Gangguan pada ginjal yang menyebabkan tidak bisa buang air kecil disebut...", options: ["Nefritis", "Anuria", "Albuminuria", "Hematuria"], answer: "Anuria" },
+    { question: "13. Dialisis adalah proses pengganti kerja ginjal yang dikenal dengan nama...", options: ["CT Scan", "Cuci darah", "Transfusi darah", "Injeksi"], answer: "Cuci darah" },
+    { question: "14. Hematuria adalah gangguan ginjal yang ditandai dengan adanya...", options: ["Protein dalam urine", "Darah dalam urine", "Garam dalam darah", "Uap air dalam urine"], answer: "Darah dalam urine" },
+    { question: "15. Fungsi empedu adalah membantu dalam pencernaan lemak dan mengemulsikannya serta membuang sisa metabolisme berupa...", options: ["Amilase", "Urea", "Bilirubin", "Lemak"], answer: "Bilirubin" },
+    { question: "16. Keringat terdiri atas...", options: ["Air dan protein", "Air dan enzim", "Air dan garam mineral", "Garam dan glukosa"], answer: "Air dan garam mineral" },
+    { question: "17. Alat ekskresi pada manusia yang mengeluarkan zat sisa melalui penguapan adalah...", options: ["Hati", "Ginjal", "Paru-paru", "Usus"], answer: "Paru-paru" },
+    { question: "18. Zat beracun yang dihasilkan hati dan dibuang melalui urine adalah...", options: ["Urea", "Glukosa", "Amilase", "Oksigen"], answer: "Urea" },
+    { question: "19. Pengeluaran keringat berlebihan disebut...", options: ["Hipotermia", "Hiperhidrosis", "Dehidrasi", "Ekskresi"], answer: "Hiperhidrosis" },
+    { question: "20. Gangguan pada sistem ekskresi dapat mengakibatkan...", options: ["Penurunan suhu tubuh", "Penumpukan zat sisa", "Meningkatkan metabolisme", "Menghilangkan virus"], answer: "Penumpukan zat sisa" }
+  ];
+
+    let quizTimer;
+    let countdownInterval;
+    const timeLimit = 20 * 60 * 1000; // 20 menit
+
+    function startQuiz() {
+      const nama = document.getElementById('nama').value;
+      const kelas = document.getElementById('kelas').value;
+      const tahun = document.getElementById('tahun').value;
+      const sekolah = document.getElementById('sekolah').value;
+
+      if (!nama || !kelas || !tahun || !sekolah) {
+        alert("Harap lengkapi semua data identitas.");
+        return;
+      }
+
+      document.getElementById('identityForm').classList.add('hidden');
+      document.getElementById('quizForm').classList.remove('hidden');
+      document.getElementById('timer').classList.remove('hidden');
+
+      const container = document.getElementById('questionsContainer');
+      container.innerHTML = "";
+      questions.forEach((q, index) => {
+        const div = document.createElement('div');
+        div.classList.add('question');
+        div.innerHTML = `<p>${q.question}</p>` + q.options.map(opt => `
+          <label><input type="radio" name="q${index}" value="${opt}"> ${opt}</label><br>`).join('');
+        container.appendChild(div);
+      });
+
+      // Timer otomatis submit setelah 20 menit
+      quizTimer = setTimeout(() => {
+        alert("Waktu habis! Kuis akan otomatis disubmit.");
+        submitQuiz();
+      }, timeLimit);
+
+      // Countdown display
+      let remaining = timeLimit / 1000;
+      const timerDisplay = document.getElementById('timer');
+      timerDisplay.textContent = `Sisa waktu: ${remaining} detik`;
+      countdownInterval = setInterval(() => {
+        remaining--;
+        timerDisplay.textContent = `Sisa waktu: ${remaining} detik`;
+        if (remaining <= 0) {
+          clearInterval(countdownInterval);
+        }
+      }, 1000);
+    }
+
+    function submitQuiz() {
+      clearTimeout(quizTimer);
+      clearInterval(countdownInterval);
+
+      let score = 0;
+      questions.forEach((q, index) => {
+        const selected = document.querySelector(`input[name="q${index}"]:checked`);
+        if (selected && selected.value === q.answer) {
+          score += 10;
+        }
+      });
+
+      document.getElementById('quizForm').classList.add('hidden');
+      document.getElementById('timer').classList.add('hidden');
+      const resultDiv = document.getElementById('result');
+      resultDiv.classList.remove('hidden');
+
+      const nama = document.getElementById('nama').value;
+      const kelas = document.getElementById('kelas').value;
+      const tahun = document.getElementById('tahun').value;
+      const sekolah = document.getElementById('sekolah').value;
+
+      let message = "";
+      if (score >= 70) {
+        message = "<p style='color: green;'><strong>Selamat!</strong> Anda Sudah Bisa Melanjutkan ke Materi Berikutnya.</p>";
+      } else {
+        message = "<p style='color: red;'><strong>Mohon maaf.</strong> Silakan pelajari kembali materi ini sebelum melanjutkan ke materi berikutnya.</p>";
+      }
+
+      resultDiv.innerHTML = `
+        <h3>Hasil Kuis</h3>
+        <p><strong>Nama:</strong> ${nama}</p>
+        <p><strong>Kelas:</strong> ${kelas}</p>
+        <p><strong>Tahun Ajaran:</strong> ${tahun}</p>
+        <p><strong>Sekolah:</strong> ${sekolah}</p>
+        <p><strong>Skor Anda:</strong> ${score} dari 200</p>
+        ${message}
+      `;
+    }
+  </script>
+</body>
+</html>
